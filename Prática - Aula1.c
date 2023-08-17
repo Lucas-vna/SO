@@ -1,9 +1,8 @@
 #include <unistd.h>
 #include <signal.h>
 
-char "msg = "ola\n\n";
-
 int count;
+int count2;
 
 void handlerTSTP(int signum){
 	cont++;
@@ -21,12 +20,20 @@ void handlerAL(int signum){
 	write(1, "sinal de alarme recebido\n", 25);
 }
 
+void handlerINT(int signum){
+	count2++;
+	write(1, "ctrl+c apertado", 25);
+	if(count2 == 1) alarm(0);
+}
+
 int main(){
 
 	int count = 0;
-
+	int count2 = 0;
+	
 	signal(SIGALRM, handlerAL);
 	signal(SIGTSTP, handlerTSTP);
+	signal(SIGINT, handlerINT);
 
 	while(1){
 		alarm(5);
