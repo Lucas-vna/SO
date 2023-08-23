@@ -3,17 +3,21 @@
 #include <signal.h>
 #include <stdlib.h>
 
-//char * msg = (char *) malloc(20*sizeof(char));
+int main()
+{
 
-int main(){
+    char *nome = "Lucas dos Reis Viana \n";
+    int ra = 23;
 
-    char * nome = "Lucas dos Reis Viana \n";
-    int ra = 2321645; 
+   ra = ra + '0';
 
-    //read(0, &ra , sizeof(int));
-
+    //nome
     write(1, nome, 23);
-    write(1, &ra, 1);
+    
+    //ra
+    //char ra_str[12]; // Para converter o RA em string
+    //sprintf(ra_str, "%d", ra);
+    write(1, &ra, sizeof(int));
 
     return 0;
 }
