@@ -4,55 +4,59 @@
 #include <stdlib.h>
 #include <string.h>
 
-int count;
+int count, iaux;
 char aux;
 
 void handlerAL(int signum){
-	write(1, "\nSaindo do Programa...\n", 23);
-	exit(0);
+    write(1, "\n\nSaindo do Programa...\n\n", 23);
+    exit(0);
 }
 
 void handlerINT(int signum){
-	count++;
-	write(1, "\nctrl+c apertado", 16);
-	
-	if(count == 3){
-        write(1, "Realmente Deseja Sair? [Y/N]: ", 31);
+
+    count++;
+    iaux++;
+
+    if (count == 3)
+    {
+        write(1, "\nDeseja said do programa? [y/n]", 31);
         alarm(20);
 
-        read(0, &aux, sizeof(aux));
-        //signal(SIGALRM, handlerAL);
+        read(1, &aux, sizeof(aux));
+        signal(SIGALRM, handlerAL);
 
-         if (aux == 'y')
-         {
-            printf("1");
+        if (aux == 'y')
+        {
+            write(1, "\n\nFINALIZANDO O PROGRAMA...\n\n", 28);
             exit(0);
-         }else
-         {
-            printf("2");
+
+        }else if(aux == 'n'){
+
             count = 0;
-         }
-        
-    };
+            write(1, "\nCONTINUANDO...\n\n", 17);
+        }
+    }//if
+}//funcao
+
+void handlerTSTP(int signum){
+
+    iaux = iaux + '0';
+
+    write(1, "\nCTRL+C FOI APERTADO ", 21);
+    write(1, &iaux, 1);
+    write(1, " VEZES\n", 7);
 }
 
-void handlesrTSTP(int signum){
-
-	int iaux = count + '0';
-
-	write(1, "\nctrl+c apertado ", 18);
-	write(1, &aux, 1);
-	write(1, " vezes\n", 8);
-	
-}
-
-int main (){
+int main(int argc, char *argv[]){
+    
+    int iaux = 0;
+    int count = 0;
 
     signal(SIGALRM, handlerAL);
-	//signal(SIGTSTP, handlerTSTP);
-	signal(SIGINT, handlerINT);
+    signal(SIGTSTP, handlerTSTP);
+    signal(SIGINT, handlerINT);
 
-    while(1){
+    while (1){
         pause();
     }
 
