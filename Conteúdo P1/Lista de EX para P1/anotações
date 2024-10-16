@@ -1,0 +1,5 @@
+PROCESSO
+é um programa em execução, que possui uma thread alocada para ele e um endereço na memória. 
+possui estados, tais como execução(instruções sendo executadas), pronto(processo está pronto para entrara em exeução) e espera
+processo não compartilham dados, 
+threads conseguem compartilhar dados, pq estao associadas a um mesmo processo
