@@ -1,43 +1,59 @@
-#include <stdio.h>
-#include <unistd.h>
+/*
+Excrever um programa C que cria uma árvore de 3 processos, onde o processo A faz um fork() criando um processo B, o processo B, por sua vez, faz um fork() 
+criando um processo C. Cada processo deve exibir uma mensagem "Eu sou o processo XXX, filho de YYY", onde XXX e YYY são PIDs de processos. Utilizar wait() 
+para garantir que o processo C imprima sua resposta antes do B
+ e que o processo B imprima sua resposta antes do A. Utilizar sleep() (man 3 sleep) para haver um intervalo de 1 segundo entre cada mensagem impressa.
+*/
+
+
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 int main(){
 
-    int pid;
+    int PID = fork();
 
-    pid = fork();
-
-    if (pid > 0)
-    {
+    if (PID < 0){
         
-        wait(pid);
-        printf("\nEu sou o precesso A (PID - %d)", getpid());
-        sleep(2);
+        
+        printf("Erro ao chamar o sitema\n\n");
+
+
+    }else if (PID > 0){
+
+        wait(PID);
+        printf("Sou o processo A %d, filho de %d\n", getpid(), getppid());
+        sleep(1);
+
+    } else if (PID == 0){
         
 
-    }else if(pid == 0){
+        int PID2 = fork();
 
-        wait(pid);
-        sleep(3);
-        printf("\nEu sou o processo B (PID - %d), filho de A", getpid());
-        
-        pid = fork();
+        if (PID2 < 0){
 
-        if(pid > 0){
+            printf("Erro ao chamar o sitema\n\n");
 
-        }else if(pid == 0){
+        }else if (PID2 > 0){
+            
+        }else if (PID2 == 0){
+            
+            
+            wait(PID);
+            printf("Sou o processo C %d\n", getpid());
+            sleep(3);
 
-            sleep(1);
-            printf("\nEu sou o processo C (PID - %d), filho de B e neto de A\n\n", getpid());
+            exit(0);
 
-        }else if(pid < 0){
-            printf("Erro");
         }
 
-    }
-    
+        wait(PID);
+        printf("Sou o processo B %d, filho de %d\n", getpid(), getppid());
+        sleep(2);
 
+    } 
+    
     return 0;
 }
